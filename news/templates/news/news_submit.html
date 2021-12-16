@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags compress static news%}
+
+{% block extra_css %}
+    {% compress css%}
+        <link type="text/x-scss" href="{% static 'scss/news.scss' %}" rel="stylesheet" media="screen">
+    {% endcompress css%}
+{% endblock %}
+
+{% block content %}
+<div class="register-container">
+    <nav class="navbar navbar-dark bg-dark" aria-label="breadcrumb">
+        <div class="container container-fluid text-light fs-5">
+            <ol class="breadcrumb mb-0 mt-1 align-middle">
+                <li class="breadcrumb-item"><a class="text-light text-decoration-none" href="{{page.get_parent.url}}">{{page.get_parent.title}}</a></li> 
+                <li class="breadcrumb-item active"><a class="text-light text-decoration-none" href="{{page.url}}">{{page.title}}</a></li>
+            </ol>
+        </div>
+    </nav>
+    <div class="container pt-5 pb-5 content-container">
+        <h1>Submit a news item</h1>
+        {% if success%}
+            <p>Thank you. Your request has been received and will be considered for approval.</p>
+        {% endif %}
+
+        <form class="row g-3" method="POST", action="{{page.url}}/submit">
+            {% csrf_token %}
+            <div class="col-12 col-md-6">
+                {{form.url.errors}}
+                <label class="form-label" for="{{form.url.id_for_label}}">Url:</label>
+                {{form.url}}
+                <div id="urlHelp" class="form-text text-secondary">The URL your requested entry refers to.</div>
+            </div>
+            <div class="col-12 col-md-6">
+                {{form.title.errors}}
+                <label class="form-label" for="{{form.title.id_for_label}}">Title:</label>
+                {{form.title}}
+                <div id="titleHelp" class="form-text text-secondary">Suggest a title for your news entry</div>
+            </div>
+            <div class="col-12 col-md-6">
+                {{form.name.errors}}
+                <label class="form-label" for="{{form.email.id_for_label}}">Your name:</label>
+                {{form.name}}
+                <div id="nameHelp" class="form-text text-secondary">Your name will not be displayed on our page. We need it simply for correspondences with you.</div>
+            </div>
+            <div class="col-12 col-md-6">
+                {{form.email.errors}}
+                <label class="form-label" for="{{form.email.id_for_label}}">Your email address:</label>
+                {{form.email}}
+                <div id="emailHelp" class="form-text text-secondary">We need your email to get in touch with you.</div>
+            </div>
+            <div class="col-12">
+                {{form.description.errors}}
+                <label class="form-label" for="{{form.description.id_for_label}}">Description:</label>
+                {{form.description}}
+            </div>
+            <div class="col-12 col-md-3">
+                {{form.category.errors}}
+                <label class="form-label" for="{{form.category.id_for_label}}">Category:</label>
+                {{form.category}}
+            </div>
+            <div class="col-12">
+                <button id="submit" class="btn btn-primary" type="submit" name="Submit">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
